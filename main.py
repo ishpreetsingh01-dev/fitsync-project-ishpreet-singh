@@ -49,7 +49,8 @@ try:
         col3.metric(label="Average Recovery Score", value=f"{average_recovery_score:.1f}")
 
         # Display the table
-        st.write("### Recent Health Logs", df.head())
+        st.write(f"### Recent Health Logs ({len(df)} entries found)")
+        st.dataframe(df)
 
 except Exception as e:
     st.error("An error occurred while processing the data.")
