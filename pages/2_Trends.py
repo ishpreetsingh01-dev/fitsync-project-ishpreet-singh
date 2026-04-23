@@ -6,10 +6,15 @@ from modules.processor import process_data
 st.set_page_config(layout="wide", page_title="FitSync Trends")
 st.title("📈 Trends & Deep Insights")
 
-try:
+@st.cache_data
+def process_and_prepare_data():
     df = process_data()
     df['Date'] = pd.to_datetime(df['Date'])
+    return df
     
+try:
+    df = process_and_prepare_data()
+
     # Simple Tabbed Interface
     tab1, tab2 = st.tabs(["📊 Summary Statistics", "🔍 Distribution Analysis"])
 

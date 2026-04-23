@@ -3,6 +3,17 @@ from modules.processor import process_data
 import pandas as pd
 import plotly.express as px
 
+@st.cache_data
+def get_filtered_data(time_range, df):
+    df['Date'] = pd.to_datetime(df['Date'])
+    # Filtering Logic
+    if time_range == "Last 7 Days":
+        return df[df['Date'] >= (df['Date'].max() - pd.Timedelta(days=7))]
+    elif time_range == "Last 30 Days":
+        return df[df['Date'] >= (df['Date'].max() - pd.Timedelta(days=30))]
+    else:
+        return df
+
 # Title of the dashboard
 st.title("📊 Dashboard Overview")
 
@@ -14,15 +25,7 @@ COLORS = ["#00d4ff", "#d33682", "#39FF14", "#FFFB00"]
 
 try:
     df = process_data()
-    df['Date'] = pd.to_datetime(df['Date'])
-
-    # Filtering Logic
-    if time_range == "Last 7 Days":
-        filtered_df = df[df['Date'] >= (df['Date'].max() - pd.Timedelta(days=7))]
-    elif time_range == "Last 30 Days":
-        filtered_df = df[df['Date'] >= (df['Date'].max() - pd.Timedelta(days=30))]
-    else:
-        filtered_df = df
+    filtered_df = get_filtered_data(time_range, df)
 
     # --- Metrics Section ---
     m1, m2, m3 = st.columns(3)
